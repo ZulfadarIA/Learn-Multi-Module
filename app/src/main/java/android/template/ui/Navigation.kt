@@ -16,6 +16,8 @@
 
 package android.template.ui
 
+import android.template.feature.launchdetail.ui.LaunchDetailScreen
+import android.template.feature.launchlist.ui.LaunchListScreen
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,13 +26,30 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import android.template.feature.mymodel.ui.MyModelScreen
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 
 @Composable
 fun MainNavigation() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "main") {
-        composable("main") { MyModelScreen(modifier = Modifier.padding(16.dp)) }
-        // TODO: Add more destinations
+    NavHost(navController = navController, startDestination = Screen.launchList.route) {
+        composable(Screen.launchList.route) {
+            LaunchListScreen(
+                onLaunchClick = { launchId ->
+                    navController.navigate(Screen.launchDetail.createRoute(launchId))
+                }
+            )
+        }
+        composable(
+            route = Screen.launchDetail.route,
+            arguments = listOf(navArgument("launchId") { type = NavType.StringType })
+        ) { backstackEntry ->
+            val launchId = backstackEntry.arguments?.getString("launchId") ?: ""
+            LaunchDetailScreen(
+                launchId = launchId,
+                navigateToLogin = {}
+            )
+        }
     }
 }

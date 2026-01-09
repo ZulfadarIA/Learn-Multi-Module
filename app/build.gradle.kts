@@ -30,7 +30,7 @@ android {
 
     defaultConfig {
         applicationId = "android.template"
-        minSdk = 23
+        minSdk = 30
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -79,6 +79,9 @@ android {
 dependencies {
     implementation(project(":core-ui"))
     implementation(project(":feature-mymodel"))
+    implementation(project(":feature-launchlist"))
+    implementation(project(":feature-launchdetail"))
+    implementation(project(":feature-login"))
 
     // Core Android dependencies
     implementation(libs.androidx.core.ktx)
