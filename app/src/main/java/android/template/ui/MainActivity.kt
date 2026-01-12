@@ -17,6 +17,8 @@
 package android.template.ui
 
 import android.os.Bundle
+import android.template.core.data.TokenRepository
+import android.template.core.data.TokensRepository
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,12 +27,16 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import dagger.hilt.android.AndroidEntryPoint
 import android.template.core.ui.MyApplicationTheme
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var tokenRepository: TokenRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        tokenRepository.init(this)
         setContent {
             MyApplicationTheme {
                 Surface(

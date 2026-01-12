@@ -24,6 +24,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import android.template.core.data.MyModelRepository
 import android.template.core.data.DefaultMyModelRepository
+import android.template.core.data.TokenRepository
+import android.template.core.data.TokensRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -36,6 +38,7 @@ interface DataModule {
     fun bindsMyModelRepository(
         myModelRepository: DefaultMyModelRepository
     ): MyModelRepository
+
 }
 
 class FakeMyModelRepository @Inject constructor() : MyModelRepository {

@@ -1,4 +1,4 @@
-mutation Login($email: String){
+mutation Login($email: String!){
     login(email: $email) {
         token
     }

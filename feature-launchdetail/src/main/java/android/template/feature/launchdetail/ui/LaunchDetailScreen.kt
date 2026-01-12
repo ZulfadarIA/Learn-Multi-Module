@@ -1,7 +1,9 @@
 package android.template.feature.launchdetail.ui
 
+import android.template.core.data.TokenRepository
 import android.template.core.ui.MyApplicationTheme
 import android.template.feature.ui.launchdetail.R
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +23,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -29,7 +35,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.example.rocketreserver.BookTripMutation
+import com.example.rocketreserver.CancelTripMutation
 import com.example.rocketreserver.LaunchDetailQuery
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,10 +48,18 @@ fun LaunchDetailScreen(
 ) {
     val viewModel: LaunchDetailViewModel = hiltViewModel()
     val launchDetailState by viewModel.launchDetail.collectAsStateWithLifecycle()
-    
+    val bookState by viewModel.bookState.collectAsStateWithLifecycle()
+
     LaunchedEffect(launchId) {
         if (viewModel.launchDetail.value !is LaunchDetailState.Success) {
             viewModel.loadLaunchDetail(launchId)
+        }
+    }
+
+    LaunchedEffect(bookState.requireLogin) {
+        if (bookState.requireLogin) {
+            navigateToLogin()
+            viewModel.consumeLoginEvent()
         }
     }
 
@@ -72,7 +89,13 @@ fun LaunchDetailScreen(
                     LaunchDetailScreenContent(
                         modifier = Modifier,
                         data = launchDetailData,
-                        navigateToLogin = navigateToLogin
+                        bookingLoadng = bookState.loading,
+                        isBooked = bookState.isBooked,
+                        navigateToLogin = {
+                            viewModel.onBookButtonClick(
+                                launchDetailData.launch?.id.orEmpty()
+                            )
+                        },
                     )
                 }
             }
@@ -83,7 +106,10 @@ fun LaunchDetailScreen(
 @Composable
 private fun LaunchDetailScreenContent(
     modifier: Modifier = Modifier,
-    data: LaunchDetailQuery.Data, navigateToLogin: () -> Unit
+    data: LaunchDetailQuery.Data,
+    bookingLoadng: Boolean,
+    isBooked: Boolean,
+    navigateToLogin: () -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -130,10 +156,14 @@ private fun LaunchDetailScreenContent(
             modifier = Modifier
                 .padding(top = 32.dp)
                 .fillMaxWidth(),
-            onClick = {
-            }
+            enabled = !bookingLoadng,
+            onClick = navigateToLogin,
         ) {
-            Text(text = "Book now")
+            if (bookingLoadng) {
+                SmallLoading()
+            } else {
+                Text(text = if (!isBooked) "Book now" else "Cancel booking")
+            }
         }
     }
 }

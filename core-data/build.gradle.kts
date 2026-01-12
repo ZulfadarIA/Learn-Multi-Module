@@ -57,6 +57,7 @@ dependencies {
     kapt(libs.hilt.compiler)
 
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.security.crypto)
 
     // Local tests: jUnit, coroutines, Android runner
     testImplementation(libs.junit)

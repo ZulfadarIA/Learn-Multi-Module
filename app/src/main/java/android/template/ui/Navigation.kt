@@ -18,6 +18,7 @@ package android.template.ui
 
 import android.template.feature.launchdetail.ui.LaunchDetailScreen
 import android.template.feature.launchlist.ui.LaunchListScreen
+import android.template.feature.login.ui.LoginScreen
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -45,10 +46,20 @@ fun MainNavigation() {
             route = Screen.launchDetail.route,
             arguments = listOf(navArgument("launchId") { type = NavType.StringType })
         ) { backstackEntry ->
-            val launchId = backstackEntry.arguments?.getString("launchId") ?: ""
+            val launchId = backstackEntry.arguments!!.getString("launchId")!!
             LaunchDetailScreen(
                 launchId = launchId,
-                navigateToLogin = {}
+                navigateToLogin = {
+                    navController.navigate(Screen.login.route)
+                }
+            )
+        }
+
+        composable(Screen.login.route) {
+            LoginScreen(
+                navigateBack = {
+                    navController.popBackStack()
+                }
             )
         }
     }
