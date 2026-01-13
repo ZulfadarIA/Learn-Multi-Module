@@ -31,7 +31,9 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
 @Composable
-fun MainNavigation() {
+fun MainNavigation(
+    modifier: Modifier = Modifier
+) {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = Screen.launchList.route) {

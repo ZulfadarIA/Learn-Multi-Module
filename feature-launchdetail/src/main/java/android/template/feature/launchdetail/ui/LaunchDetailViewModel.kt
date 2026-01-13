@@ -1,8 +1,6 @@
 package android.template.feature.launchdetail.ui
 
-import android.R.attr.data
 import android.template.core.data.TokenRepository
-import android.template.core.data.TokensRepository
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

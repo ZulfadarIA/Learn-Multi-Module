@@ -79,6 +79,7 @@ android {
 dependencies {
     implementation(project(":core-ui"))
     implementation(project(":core-data"))
+    implementation(project(":core-network"))
     implementation(project(":feature-mymodel"))
     implementation(project(":feature-launchlist"))
     implementation(project(":feature-launchdetail"))
@@ -92,6 +93,9 @@ dependencies {
     // Hilt Dependency Injection
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+
+    //apollo-runtime
+    implementation(libs.apollo.runtime)
 
     // Arch Components
     implementation(libs.androidx.lifecycle.runtime.compose)
